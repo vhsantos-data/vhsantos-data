@@ -58,13 +58,6 @@ I build end-to-end automation systems that collect, process, and visualize data.
 
 ---
 
-### 📊 GitHub Stats
-
-![Vitor's GitHub stats](https://github-readme-stats.vercel.app/api?username=vhsantos-data&show_icons=true&theme=tokyonight&hide_border=true)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=vhsantos-data&layout=compact&theme=tokyonight&hide_border=true)
-
----
-
 ### 📫 Let's Connect
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vhsantos-data)
