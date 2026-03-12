@@ -1,0 +1,137 @@
+# 🚨 Operational Failure Management System
+
+> End-to-end automation system for tracking, reporting, and analyzing operational failures across multiple business areas at Mercado Libre.
+
+![Status](https://img.shields.io/badge/Status-In_Production-brightgreen)
+![Areas](https://img.shields.io/badge/Areas_Served-4-blue)
+![TLs](https://img.shields.io/badge/Team_Leaders-15-blue)
+![Uptime](https://img.shields.io/badge/Uptime-24%2F7-brightgreen)
+
+---
+
+## 📋 Overview
+
+This project was born from a real operational need: there was no structured process for managing failures across teams. What started as manual Excel spreadsheets evolved into a fully automated system integrating **Slack, Google Sheets, n8n, and Looker Studio**.
+
+The system runs 24/7 with zero manual intervention, serving 4 business areas (Mature Sales, Publications, Buyer, and Insurance) and 15 Team Leaders.
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐     ┌──────────────┐
+│  Slack Form  │────▶│ Google Sheets │────▶│  n8n Engine  │────▶│  Slack DMs   │
+│  (MELI FO)   │     │  (Database)   │     │ (Processing) │     │  (Reports)   │
+└─────────────┘     └──────┬───────┘     └──────┬──────┘     └──────────────┘
+                           │                     │
+                           ▼                     ▼
+                    ┌──────────────┐     ┌──────────────┐
+                    │ Looker Studio │     │  Auto-fill   │
+                    │ (Dashboards)  │     │ Month/Week/  │
+                    └──────────────┘     │    Year      │
+                                         └──────────────┘
+```
+
+---
+
+## ⚙️ How It Works
+
+### 1. Data Collection
+Representatives submit failure reports through a **Slack application (MELI FO)** with a structured form capturing: LDAP, Team Leader, failure type, details, and date.
+
+### 2. Data Storage
+Slack automatically inserts records into a centralized **Google Sheets** database.
+
+### 3. Automated Processing (n8n)
+Three separate workflows process and deliver reports:
+
+| Workflow | Schedule | Content |
+|----------|----------|---------|
+| **Daily** | Every morning | Previous day's failures per TL, occurrence list |
+| **Weekly** | Every Monday | Week summary, Top 3 reps, % variation vs previous week |
+| **Monthly** | 1st of each month | Full month overview, distribution by type, rep ranking |
+
+### 4. Auto-fill Temporal Fields
+A separate n8n workflow runs every 10 minutes, automatically calculating and filling **Month, Week, and Year** for new records.
+
+### 5. Visualization
+**Looker Studio** dashboards provide real-time visibility with KPIs for failure rates, trends, and team performance.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Collection | Slack Workflow Builder | Structured form for failure reporting |
+| Storage | Google Sheets | Centralized database |
+| Automation | n8n (VerdiCode/Python) | Data processing, report generation, auto-fill |
+| Visualization | Looker Studio | Interactive dashboards with KPIs |
+| Communication | Slack API | Automated DM delivery to Team Leaders |
+
+---
+
+## 📊 Results
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Report generation time | 30-60 min (manual) | Automatic (0 min) |
+| Report frequency | On-demand | Daily + Weekly + Monthly |
+| TL visibility | Low (had to request) | High (automatic DM) |
+| Data traceability | Partial (Excel) | Complete (centralized) |
+| Team coverage | Individual per area | 4 areas integrated |
+
+---
+
+## 📁 Project Structure
+
+```
+├── workflows/
+│   ├── daily/
+│   │   ├── agrupar_diario.py         # Groups data by TL for the day
+│   │   └── montar_diario.py          # Formats daily Slack report
+│   ├── weekly/
+│   │   ├── agrupar_semanal.py        # Groups + compares with previous week
+│   │   └── montar_semanal.py         # Formats weekly report with % variation
+│   ├── monthly/
+│   │   ├── agrupar_e_calcular.py     # Groups all month data by TL
+│   │   └── montar_relatorio.py       # Formats monthly Slack report
+│   ├── shared/
+│   │   └── mapear_slack.py           # Maps TL names to Slack User IDs
+│   └── auto-fill/
+│       └── calcular_mes_semana_ano.py # Auto-calculates temporal fields
+├── docs/
+│   └── architecture.md
+└── README.md
+```
+
+---
+
+## 🔑 Key Technical Decisions
+
+- **No `\n` in string loops**: VerdiCode (n8n's Python sandbox) renders `\n` as `""` in Slack. Solution: use `list.append()` + `"\n".join()` at the end.
+- **No f-strings for Slack output**: VerdiCode adds extra quotes with f-strings. Solution: string concatenation with `str()`.
+- **Single month data processing**: Merging 2 months exceeded computational limits. Solution: simplified to single-period processing per workflow.
+- **Column names with trailing spaces**: Google Sheets returns `"DATA "` and `"OCORRENCIA "` (with space). Code handles both variants.
+
+---
+
+## 🚀 Future Improvements
+
+- [ ] Migration to BigQuery for scalable data storage
+- [ ] API integration with internal CX system for automatic failure detection
+- [ ] Month-over-month variation in monthly reports
+- [ ] Correlation analysis between failures and productivity
+
+---
+
+## 👤 Author
+
+**Vitor Hugo Santos** — Young Apprentice @ Mercado Libre
+- [LinkedIn](https://www.linkedin.com/in/vhsantos-data)
+- [GitHub](https://github.com/vhsantos-data)
+
+---
+
+*Built with guidance from my manager and validated by 15 Team Leaders across 4 operational areas.*
