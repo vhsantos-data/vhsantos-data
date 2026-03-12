@@ -1,20 +1,20 @@
-# Hey, I'm Vitor Hugo! 👋
+# Hey, I'm Vitor Hugo!
 
 **Data & Automation enthusiast** turning manual processes into automated solutions that drive real impact.
 
-🎓 Systems Development @ Mackenzie University
-💼 Young Apprentice @ Mercado Libre — Back Office & Operational Support
-📍 São Paulo, Brazil
+ Systems Development @ Mackenzie University
+ Young Apprentice @ Mercado Libre — Back Office & Operational Support
+ São Paulo, Brazil
 
 ---
 
-### 🚀 What I Do
+###  What I Do
 
 I build end-to-end automation systems that collect, process, and visualize data. My main project at Mercado Libre serves **4 business areas** and **15 Team Leaders** with automated daily, weekly, and monthly reports — running **24/7 with zero manual intervention**.
 
 ---
 
-### 🛠️ Tech Stack
+###  Tech Stack
 
 **Automation & Integration**
 
